@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run build --workspaces --if-present --prefix ../../ && tsc -b && vite build",
+    "build": "npm run build -w media-core -w media-react -w media-ui-react --prefix ../../ && tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"
   },
