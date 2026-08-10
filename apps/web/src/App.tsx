@@ -42,7 +42,7 @@ function PhotoGrid({ query }: { query: string }) {
   return (
     <div className="grid-container">
       <div className="photo-grid" {...getGridProps()}>
-        {photos.map((photo: any, index) => (
+        {photos.map((photo: any, index: number) => (
           <div
             key={photo.id}
             className="photo-item"
@@ -134,7 +134,7 @@ function VideoReels({ query }: { query: string }) {
 
   const { getSwiperProps, getSwiperItemProps } = useReelSwiper({
     items: videos,
-    onActiveIndexChange: (index) => {
+    onActiveIndexChange: (index: number) => {
       // Trigger load more if we are near the end
       if (index >= videos.length - 2 && hasMore && !loading) {
         loadMore();
@@ -144,7 +144,7 @@ function VideoReels({ query }: { query: string }) {
 
   return (
     <div className="reels-container" {...getSwiperProps()}>
-      {videos.map((video: any, index) => {
+      {videos.map((video: any, index: number) => {
         const itemProps = getSwiperItemProps(index);
         const isActive = itemProps['data-active'];
         const videoFile = video.video_files.find((f: any) => f.quality === 'hd') || video.video_files[0];
