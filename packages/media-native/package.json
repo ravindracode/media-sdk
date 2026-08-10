@@ -1,0 +1,21 @@
+{
+  "name": "media-native",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w"
+  },
+  "dependencies": {
+    "media-core": "*"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-native": "*"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "typescript": "^5.0.0"
+  }
+}

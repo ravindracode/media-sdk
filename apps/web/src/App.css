@@ -1,0 +1,397 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Glassmorphism Header */
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-4);
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.app-header h1 {
+  font-size: 1.25rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* Search Bar */
+.search-form {
+  display: flex;
+  align-items: center;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 4px 4px 4px 16px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  max-width: 400px;
+  width: 100%;
+}
+
+.search-form:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.search-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.search-btn:hover {
+  background: var(--accent-hover);
+}
+
+/* Segmented Control Toggle */
+.type-toggle {
+  display: flex;
+  background: var(--bg-secondary);
+  padding: 4px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+}
+
+.type-toggle button {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.type-toggle button:hover {
+  color: var(--text-primary);
+}
+
+.type-toggle button.active {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Main Area */
+.app-main {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  background: var(--bg-primary);
+}
+
+/* Photo Grid */
+.grid-container {
+  height: 100%;
+  overflow-y: auto;
+  padding: var(--space-4);
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-3);
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.photo-item {
+  position: relative;
+  cursor: pointer;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--bg-secondary);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Stagger grid items animation based on child index, just a rough approximation for the first few */
+.photo-item:nth-child(1) { animation-delay: 0.05s; }
+.photo-item:nth-child(2) { animation-delay: 0.1s; }
+.photo-item:nth-child(3) { animation-delay: 0.15s; }
+.photo-item:nth-child(4) { animation-delay: 0.2s; }
+.photo-item:nth-child(5) { animation-delay: 0.25s; }
+.photo-item:nth-child(6) { animation-delay: 0.3s; }
+.photo-item:nth-child(n+7) { animation-delay: 0.1s; } /* Default for others */
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.photo-item:hover {
+  transform: scale(1.02);
+  box-shadow: var(--shadow-lg);
+}
+
+.photo-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.photo-item:hover img {
+  transform: scale(1.05);
+}
+
+/* Photo Hover Info Overlay */
+.photo-info-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 50%);
+  display: flex;
+  align-items: flex-end;
+  padding: var(--space-3);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
+}
+
+.photo-item:hover .photo-info-overlay {
+  opacity: 1;
+}
+
+.photo-author {
+  color: white;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  transform: translateY(10px);
+  transition: transform var(--transition-normal);
+}
+
+.photo-item:hover .photo-author {
+  transform: translateY(0);
+}
+
+/* Lightbox Modal */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn var(--transition-fast);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  animation: scaleIn var(--transition-normal);
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.lightbox-image {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-glass);
+}
+
+/* Modern Lightbox Navigation */
+.nav-btn, .close-btn {
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border-radius: var(--radius-full);
+}
+
+.nav-btn:hover, .close-btn:hover {
+  background: rgba(255,255,255,0.15);
+  transform: scale(1.1);
+}
+
+.close-btn {
+  position: absolute;
+  top: -20px;
+  right: -40px;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+}
+
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  margin-top: -24px;
+  width: 48px;
+  height: 48px;
+  font-size: 1.5rem;
+}
+
+.nav-btn.prev { left: -60px; }
+.nav-btn.next { right: -60px; }
+
+/* Reels Swiper */
+.reels-container {
+  height: 100%;
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+  background: var(--bg-primary);
+  scroll-behavior: smooth;
+}
+
+.reel-item {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+}
+
+/* Ensure video fills the container with good borders on desktop */
+.reel-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 768px) {
+  .reel-item {
+    padding: var(--space-2) 0;
+  }
+  .reel-video {
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+.reel-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-4) var(--space-3) var(--space-3);
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+  color: white;
+  border-bottom-left-radius: var(--radius-xl);
+  border-bottom-right-radius: var(--radius-xl);
+}
+
+.reel-info h3 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.reel-info p {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.7);
+}
+
+/* Loading Shimmer Effect */
+.loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: var(--space-4);
+  color: var(--text-secondary);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-2);
+  }
+  .search-form {
+    max-width: 100%;
+  }
+  .photo-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: var(--space-2);
+  }
+  .close-btn {
+    top: -50px;
+    right: 0;
+  }
+  .nav-btn {
+    display: none; /* Rely on touch swiping ideally, or keep small overlay buttons */
+  }
+}
